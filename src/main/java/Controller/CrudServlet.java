@@ -122,48 +122,58 @@ public class CrudServlet extends HttpServlet {
     }
 
     private void showForm(HttpServletResponse response, User user) throws IOException {
-    response.setContentType("text/html; charset=UTF-8");
-    PrintWriter out = response.getWriter();
-    boolean isEdit = (user != null);
+        response.setContentType("text/html; charset=UTF-8");
+        PrintWriter out = response.getWriter();
+        boolean isEdit = (user != null);
 
-    out.println("<!DOCTYPE html>");
-    out.println("<html><head><title>User Form</title>");
-    out.println("<style>");
-    out.println("table { border-collapse: collapse; }");
-    out.println("td { padding: 8px; }");
-    out.println("label { display: inline-block; width: 100px; font-weight: bold; }");
-    out.println("input[type=text], input[type=password], input[type=email] { width: 200px; }");
-    out.println("</style>");
-    out.println("</head><body>");
+        out.println("<!DOCTYPE html>");
+        out.println("<html><head><title>User Form</title>");
+        out.println("<style>");
+        out.println("table { border-collapse: collapse; }");
+        out.println("td { padding: 8px; }");
+        out.println("label { display: inline-block; width: 100px; font-weight: bold; }");
+        out.println("input[type=text], input[type=password], input[type=email] { width: 200px; }");
+        out.println("</style>");
+        out.println("</head><body>");
 
-    out.println("<h2>" + (isEdit ? "Sửa User" : "Thêm User") + "</h2>");
-    out.println("<form action='CrudServlet' method='get'>");
+        out.println("<h2>" + (isEdit ? "Sửa User" : "Thêm User") + "</h2>");
+        out.println("<form action='CrudServlet' method='get'>");
 
-    if (isEdit) {
-        out.println("<input type='hidden' name='action' value='update'/>");
-        out.println("<input type='hidden' name='id' value='" + user.getId() + "'/>");
-    } else {
-        out.println("<input type='hidden' name='action' value='insert'/>");
+        if (isEdit) {
+            out.println("<input type='hidden' name='action' value='update'/>");
+            out.println("<input type='hidden' name='id' value='" + user.getId() + "'/>");
+        } else {
+            out.println("<input type='hidden' name='action' value='insert'/>");
+        }
+
+        out.println("<table>");
+        out.println("<tr><td><label>Tên:</label></td>"
+                + "<td><input type='text' name='name' value='" + (isEdit ? user.getName() : "") + "'/></td></tr>");
+        out.println("<tr><td><label>Mật khẩu:</label></td>"
+                + "<td><input type='password' name='password' value='" + (isEdit ? user.getPassword() : "") + "'/></td></tr>");
+        out.println("<tr><td><label>Email:</label></td>"
+                + "<td><input type='email' name='email' value='" + (isEdit ? user.getEmail() : "") + "'/></td></tr>");
+        out.println("<tr>");
+        out.println("<td><label>Quốc gia:</label></td>");
+        out.println("<td>");
+        out.println("<select name='country'>");
+        out.println("<option value=''>-- Chọn quốc gia --</option>");
+        out.println("<option value='Vietnam'" + (isEdit && "Vietnam".equals(user.getCountry()) ? " selected" : "") + ">Việt Nam</option>");
+        out.println("<option value='USA'" + (isEdit && "USA".equals(user.getCountry()) ? " selected" : "") + ">Mỹ</option>");
+        out.println("<option value='Japan'" + (isEdit && "Japan".equals(user.getCountry()) ? " selected" : "") + ">Nhật Bản</option>");
+        out.println("<option value='China'" + (isEdit && "China".equals(user.getCountry()) ? " selected" : "") + ">Trung Quốc</option>");
+        out.println("</select>");
+        out.println("</td>");
+        out.println("</tr>");
+
+        out.println("<tr><td></td><td><input type='submit' value='Lưu'/></td></tr>");
+        out.println("</table>");
+
+        out.println("</form>");
+        out.println("<a href='CrudServlet?action=list'>⬅ Quay lại danh sách</a>");
+
+        out.println("</body></html>");
     }
-
-    out.println("<table>");
-    out.println("<tr><td><label>Tên:</label></td>"
-            + "<td><input type='text' name='name' value='" + (isEdit ? user.getName() : "") + "'/></td></tr>");
-    out.println("<tr><td><label>Mật khẩu:</label></td>"
-            + "<td><input type='password' name='password' value='" + (isEdit ? user.getPassword() : "") + "'/></td></tr>");
-    out.println("<tr><td><label>Email:</label></td>"
-            + "<td><input type='email' name='email' value='" + (isEdit ? user.getEmail() : "") + "'/></td></tr>");
-    out.println("<tr><td><label>Quốc gia:</label></td>"
-            + "<td><input type='text' name='country' value='" + (isEdit ? user.getCountry() : "") + "'/></td></tr>");
-    out.println("<tr><td></td><td><input type='submit' value='Lưu'/></td></tr>");
-    out.println("</table>");
-
-    out.println("</form>");
-    out.println("<a href='CrudServlet?action=list'>⬅ Quay lại danh sách</a>");
-
-    out.println("</body></html>");
-}
-
 
     private void editForm(HttpServletRequest request, HttpServletResponse response) throws IOException {
         int id = Integer.parseInt(request.getParameter("id"));
