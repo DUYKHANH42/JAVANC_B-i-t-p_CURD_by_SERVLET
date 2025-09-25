@@ -188,8 +188,22 @@ public class CrudServlet extends HttpServlet {
         String country = request.getParameter("country");
 
         User u = new User(name, password, email, country);
-        userDAO.insertUser(u);
-        response.sendRedirect("CrudServlet?action=list");
+        boolean success = userDAO.insertUser(u);
+
+        PrintWriter out = response.getWriter();
+        response.setContentType("text/html;charset=UTF-8");
+
+        if (success) {
+            out.println("<script type='text/javascript'>");
+            out.println("alert('Thêm user thành công!');");
+            out.println("window.location='CrudServlet?action=list';");
+            out.println("</script>");
+        } else {
+            out.println("<script type='text/javascript'>");
+            out.println("alert('Thêm user thất bại!');");
+            out.println("window.location='CrudServlet?action=new';");
+            out.println("</script>");
+        }
     }
 
     private void updateUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -200,8 +214,17 @@ public class CrudServlet extends HttpServlet {
         String country = request.getParameter("country");
 
         User u = new User(id, name, password, email, country);
-        userDAO.updateUser(u);
-        response.sendRedirect("CrudServlet?action=list");
+        boolean success = userDAO.updateUser(u);
+
+        PrintWriter out = response.getWriter();
+        response.setContentType("text/html;charset=UTF-8");
+
+        if (success) {
+            out.println("<script type='text/javascript'>");
+            out.println("alert('Update user thành công!');");
+            out.println("window.location='CrudServlet?action=list';");
+            out.println("</script>");
+        }
     }
 
     private void deleteUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
