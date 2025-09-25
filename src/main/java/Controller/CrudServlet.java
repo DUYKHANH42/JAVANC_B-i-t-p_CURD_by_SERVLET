@@ -187,7 +187,7 @@ public class CrudServlet extends HttpServlet {
         String email = request.getParameter("email");
         String country = request.getParameter("country");
 
-        User u = new User(0, name, password, email, country);
+        User u = new User(name, password, email, country);
         userDAO.insertUser(u);
         response.sendRedirect("CrudServlet?action=list");
     }
